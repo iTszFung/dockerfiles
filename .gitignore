@@ -67,4 +67,3 @@ tags
 [._]*.un~
 */rootfs.tar.xz
 app
-baselayer

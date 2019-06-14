@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# functions v0.1.0 Shell 函数库
+
+MODULE="$(basename $0)"
+# 重置
+RESET='\033[0m'
+# 前景色
+BOLD='\033[1m'
+BLACK='\033[38;5;0m'
+RED='\033[38;5;1m'
+GREEN='\033[38;5;2m'
+YELLOW='\033[38;5;3m'
+BLUE='\033[38;5;4m'
+MAGENTA='\033[38;5;5m'
+CYAN='\033[38;5;6m'
+WHITE='\033[38;5;7m'
+# 背景色
+ON_BLACK='\033[48;5;0m'
+ON_RED='\033[48;5;1m'
+ON_GREEN='\033[48;5;2m'
+ON_YELLOW='\033[48;5;3m'
+
+msg() {
+  echo -e " ${DEBUG:+${ON_YELLOW}${MAGENTA}${MODULE} ${BLUE}$(date "+%T.%2N ")}${RESET}${@}${RESET}\n" >&2
+}
+logs() {
+  msg "${ON_GREEN}${WHITE} [✔] ⇒ ${RESET} ${@}"
+}
+warn() {
+  msg "${YELLOW} [ℹ︎] ${RESET} ${@}"
+}
+error() {
+  msg "${ON_RED}${WHITE} [✘] ${RESET} ${@}"
+}
+
+# 继续运行
+continue_exec() {
+  [ -n "${FORCE}" ] && return || true
+  read -r -p "$1 确认继续 ？ [Y|n] " response
+  case $response in
+    n*|N*) exit 1;;
+  esac
+}
+
+# 链接
+lnif() {
+  if [ -e "$1" ]; then
+    ln -sf "$1" "$2"
+    [ $? == 0 ] && success "链接文件成功"
+  fi
+}
+
+welcome() {
+  logs "更多详细信息请查看：https://github.com/iTszFung/dockerfiles/issues"
+  logs "若发现有问题，请联系：itszfung@icloud.com"
+}
+

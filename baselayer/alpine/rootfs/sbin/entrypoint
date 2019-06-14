@@ -1,0 +1,6 @@
+#!/bin/sh
+
+. /usr/lib/functions
+
+welcome && exec "$@"
+
