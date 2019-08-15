@@ -1,0 +1,19 @@
+
+
+
+# 47.92.70.244
+
+# /var/lib/ldap ( LDAP数据库文件) 和 /etc/ldap/slapd.d ( LDAP配置文件)
+# cn=admin,dc=nordons,dc=com
+
+# openLDAP
+docker run \
+--env LDAP_ORGANISATION="Nordon Intelligent Technology Co., Ltd" \
+--env LDAP_DOMAIN="nordons.com" \
+--env LDAP_ADMIN_PASSWORD="Nor08don10" \
+--volume /srv/nordon/docker/openldap/ldap:/var/lib/ldap \
+--volume /srv/nordon/docker/openldap/sldap.d:/etc/ldap/slapd.d \
+-p 389:389 \
+-p 636:636  \
+--name nordon-openldap \
+--detach osixia/openldap:latest

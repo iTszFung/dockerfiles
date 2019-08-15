@@ -1,0 +1,35 @@
+#!/bin/bash
+set -euo pipefail
+
+. /usr/lib/functions
+
+# Setup Catalina Opts
+: ${JOYTECH_APP_CONNECTOR_PROXYNAME:=}
+: ${JOYTECH_APP_CONNECTOR_PROXYPORT:=}
+: ${JOYTECH_APP_CONNECTOR_SCHEME:=http}
+: ${JOYTECH_APP_CONNECTOR_SECURE:=false}
+: ${JOYTECH_APP_JVM_MIN_MEMORY:=1g}
+: ${JOYTECH_APP_JVM_MAX_MEMORY:=2g}
+: ${JOYTECH_APP_JVM_SUPPORT_ARGS:=}
+
+: ${CATALINA_OPTS:=}
+CATALINA_OPTS="${CATALINA_OPTS} -DcatalinaConnectorProxyName=${JOYTECH_APP_CONNECTOR_PROXYNAME}"
+CATALINA_OPTS="${CATALINA_OPTS} -DcatalinaConnectorProxyPort=${JOYTECH_APP_CONNECTOR_PROXYPORT}"
+CATALINA_OPTS="${CATALINA_OPTS} -DcatalinaConnectorScheme=${JOYTECH_APP_CONNECTOR_SCHEME}"
+CATALINA_OPTS="${CATALINA_OPTS} -DcatalinaConnectorSecure=${JOYTECH_APP_CONNECTOR_SECURE}"
+
+export CATALINA_OPTS
+
+# Start Confluence as the correct user
+if [ "${UID}" -eq 0 ]; then
+    PERMISSIONS_SIGNATURE=$(stat -c "%u:%U:%a" "${JOYTECH_HOME}")
+    EXPECTED_PERMISSIONS=$(id -u ${JOYTECH_USER}):${JOYTECH_USER}:700
+    if [ "${PERMISSIONS_SIGNATURE}" != "${EXPECTED_PERMISSIONS}" ]; then
+        chmod -R 700 "${JOYTECH_HOME}" &&
+        chown -R ${JOYTECH_USER}:${JOYTECH_GROUP} ${JOYTECH_HOME}
+    fi
+    # exec su -s /bin/bash "${JOYTECH_USER}" -c "$JOYTECH_APP_INSTALL_DIR/bin/start-confluence.sh $@"
+    su-exec ${JOYTECH_USER} ${JOYTECH_APP_INSTALL_DIR}/bin/start-confluence.sh $@
+else
+    exec "${JOYTECH_APP_INSTALL_DIR}/bin/start-confluence.sh" "$@"
+fi

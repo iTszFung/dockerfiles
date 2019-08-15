@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+set -o errexit    # abort script at first error
+set -o pipefail   # return the exit status of the last command in the pipe
+
+docker build --no-cache --tag=joytech/jetbrains-license:latest .
+docker push joytech/jetbrains-license:latest
+
+# docker run -it --rm --env USER_NAME=ding -p 1228:1228 --name jetbrains $(docker_name)
+

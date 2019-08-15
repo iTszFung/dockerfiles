@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+	alpie:
+		build: .
+		image: joytech/golang
+		container_name: joytech-golang-alpine
+		networks: joytech_network
+		restart: always
+		labels:
+			docker.itszfung.description: 'JoyTech GOlang Alpine Basic Image'
+			docker.itszfung.type: 'Infrastructure'
+		volumes:
+		ports:
+			80:80
+		environment:
+			- 'JOYTECH_IMAGE_NAME=alpine'
+
+networks:
+  joytech_network:
+    driver: bridge

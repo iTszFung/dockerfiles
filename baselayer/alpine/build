@@ -1,7 +1,0 @@
-#!/bin/bash
-
-IMAGE_VERSION=3.9
-
-docker build --no-cache -t itszfung/alpine:$IMAGE_VERSION .
-docker push itszfung/alpine:$IMAGE_VERSION
-

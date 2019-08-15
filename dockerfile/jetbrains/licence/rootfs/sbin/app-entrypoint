@@ -1,0 +1,10 @@
+#!/bin/bash -e
+
+jctl welcome;
+
+if [[ "$1" == "init" ]]; then
+  exec tini -- /license/IntelliJIDEALicenseServer_linux_amd64 -u $JCAPP_USER
+  jctl info "启动 Jetbrains Licence 服务器..."
+fi
+
+exec tini -- "$@"

@@ -67,3 +67,4 @@ tags
 [._]*.un~
 */rootfs.tar.xz
 app
+moby

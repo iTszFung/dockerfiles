@@ -1,0 +1,6 @@
+.git
+scripts
+README.md
+.vagrant
+logs
+.DS_Store

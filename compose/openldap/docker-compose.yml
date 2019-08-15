@@ -1,0 +1,38 @@
+version: "2"
+services:
+  openldap:
+    restart: always
+    image: osixia/openldap:latest
+    container_name: openldap
+    environment:
+      - LDAP_ORGANISATION: "Nordon Intelligent Technology Co., Ltd"
+      - LDAP_DOMAIN: "nordons.com"
+      - LDAP_ADMIN_PASSWORD: "Nor08don10"
+      - LDAP_LOG_LEVEL: "256"
+      - LDAP_CONFIG_PASSWORD: "Nor08don10.conf"
+      - LDAP_READONLY_USER: "false"
+    tty: true
+    stdin_open: true
+    volumes:
+      - /srv/nordon/docker/openldap/ldap:/var/lib/ldap
+      - /srv/nordon/docker/openldap/sldapd.d:/etc/ldap/slapd.d
+    ports:
+      - "389:389"
+      - "636:636"
+  # phpldapadmin:
+  #   image: osixia/phpldapadmin:latest
+  #   container_name: phpldapadmin
+  #   environment:
+  #     - PHPLDAPADMIN_LDAP_HOSTS: "openldap"
+  #     - PHPLDAPADMIN_HTTPS: "false"
+  #   ports:
+  #     - "8888:80"
+  #   depends_on:
+  #     - openldap
+  lam:
+    restart: always
+    image: jacksgt/ldap-account-manager
+    ports:
+      - "10880:8080"
+    depends_on:
+      - openldap

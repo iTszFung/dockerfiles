@@ -1,0 +1,12 @@
+gitlab-ce:
+  image: "gitlab/gitlab-ce:latest"
+  restart: always
+  hostname: "git.nordons.com"
+  ports:
+    - "8880:80"
+    - "8443:443"
+    - "8822:22"
+  volumes:
+    - "/srv/nordon/docker/gitlab-ce/config:/etc/gitlab"
+    - "/srv/nordon/docker/gitlab-ce/logs:/var/log/gitlab"
+    - "/srv/nordon/docker/gitlab-ce/data:/var/opt/gitlab"
